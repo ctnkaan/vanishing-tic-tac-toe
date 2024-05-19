@@ -1,5 +1,5 @@
 import './App.css'
-import Box from './components/Box'
+import Box from './components/Box/Box'
 import { IBoxState } from './types/types'
 import { useGameStateStore } from './store/gameStateStore'
 
@@ -7,26 +7,9 @@ function App() {
     const { gameState } = useGameStateStore()
 
     return (
-        <div
-            style={{
-                width: '400px',
-                height: '400px',
-                border: '1px solid blue',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-                margin: 'auto',
-            }}
-        >
+        <div className="container">
             {gameState.map((row: IBoxState[], rowIndex: number) => (
-                <div
-                    key={rowIndex}
-                    style={{
-                        display: 'flex',
-                        gap: '16px',
-                        justifyContent: 'center',
-                    }}
-                >
+                <div key={rowIndex} className="row">
                     {row.map((_value: IBoxState, colIndex: number) => (
                         <Box rowIndex={rowIndex} colIndex={colIndex} />
                     ))}
