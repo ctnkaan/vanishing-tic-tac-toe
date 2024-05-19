@@ -1,31 +1,53 @@
 import { create } from 'zustand'
 import { Player, GameState } from '../types/types'
 
-export const useGameStateStore = create<GameStateStore>((set) => ({
-    gameState: [
-        [{ content: null }, { content: null }, { content: null }],
-        [{ content: null }, { content: null }, { content: null }],
-        [{ content: null }, { content: null }, { content: null }],
-    ],
-    setGameState: (row, col, val) =>
-        set((state) => {
-            const newGameState = state.gameState.map((rowArray, rowIndex) =>
-                rowIndex === row
-                    ? rowArray.map((box, colIndex) =>
-                          colIndex === col ? { ...box, content: val } : box
-                      )
-                    : rowArray
-            )
-            return { ...state, gameState: newGameState }
-        }),
-    turn: 'X',
-    setTurn: (player: Player): void =>
-        set((state) => ({ ...state, turn: player })),
-}))
+const initialGameState: GameState = [
+    [{ content: null }, { content: null }, { content: null }],
+    [{ content: null }, { content: null }, { content: null }],
+    [{ content: null }, { content: null }, { content: null }],
+]
 
 interface GameStateStore {
     gameState: GameState
     setGameState: (row: number, col: number, val: Player) => void
     turn: Player
-    setTurn: (player: Player) => void
+    toggleTurn: () => void
 }
+
+// Helper function to update the game state
+const updateGameState = (
+    gameState: GameState,
+    row: number,
+    col: number,
+    val: Player
+): GameState => {
+    return gameState.map((rowArray, rowIndex) => {
+        if (rowIndex === row) {
+            return rowArray.map((box, colIndex) => {
+                if (colIndex === col) {
+                    return { ...box, content: val }
+                }
+                return box
+            })
+        }
+        return rowArray
+    })
+}
+
+// Function to toggle the turn between players
+const toggleTurn = (currentTurn: Player): Player => {
+    return currentTurn === 'X' ? 'O' : 'X'
+}
+
+export const useGameStateStore = create<GameStateStore>((set) => ({
+    gameState: initialGameState,
+    setGameState: (row, col, val) =>
+        set((state) => ({
+            gameState: updateGameState(state.gameState, row, col, val),
+        })),
+    turn: 'X',
+    toggleTurn: () =>
+        set((state) => ({
+            turn: toggleTurn(state.turn),
+        })),
+}))

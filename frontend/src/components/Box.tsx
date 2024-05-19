@@ -2,7 +2,7 @@ import { Player, IBox } from '../types/types'
 import { useGameStateStore } from '../store/gameStateStore'
 
 const Box = ({ rowIndex, colIndex }: IBox) => {
-    const { gameState, setGameState } = useGameStateStore()
+    const { gameState, setGameState, turn, toggleTurn } = useGameStateStore()
 
     const handleBoxClick = (
         rowIndex: number,
@@ -10,12 +10,13 @@ const Box = ({ rowIndex, colIndex }: IBox) => {
         player: Player
     ) => {
         setGameState(rowIndex, colIndex, player)
+        toggleTurn()
     }
 
     return (
         <div
             key={`${rowIndex}-${colIndex}`}
-            onClick={() => handleBoxClick(rowIndex, colIndex, 'O')}
+            onClick={() => handleBoxClick(rowIndex, colIndex, turn)}
             style={{
                 width: '100px',
                 height: '100px',
