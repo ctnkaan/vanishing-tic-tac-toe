@@ -34,11 +34,9 @@ func handleWebSocket(c *gin.Context) {
             break
         }
 
-		fmt.Println(message)
+		fmt.Println(string(message))
 
-		msg := "Hello Client"
-
-        if err := conn.WriteMessage(messageType, []byte(msg)); err != nil {
+        if err := conn.WriteMessage(messageType, message); err != nil {
             break
         }
     }
