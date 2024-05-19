@@ -9,4 +9,5 @@ export type GameState = IBoxState[][]
 export interface IBox {
     rowIndex: number
     colIndex: number
+    socket: any
 }

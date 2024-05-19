@@ -12,9 +12,9 @@ interface GameStateStore {
     setGameState: (row: number, col: number, val: Player) => void
     turn: Player
     toggleTurn: () => void
+    sendMove: (row: number, col: number, player: Player, socket: any) => void
 }
 
-// Helper function to update the game state
 const updateGameState = (
     gameState: GameState,
     row: number,
@@ -34,7 +34,6 @@ const updateGameState = (
     })
 }
 
-// Function to toggle the turn between players
 const toggleTurn = (currentTurn: Player): Player => {
     return currentTurn === 'X' ? 'O' : 'X'
 }
@@ -50,4 +49,8 @@ export const useGameStateStore = create<GameStateStore>((set) => ({
         set((state) => ({
             turn: toggleTurn(state.turn),
         })),
+    sendMove: (row, col, player, socket) => {
+        const move = JSON.stringify({ row, col, player })
+        socket.send(move)
+    },
 }))

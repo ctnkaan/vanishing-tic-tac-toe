@@ -2,8 +2,9 @@ import { Player, IBox } from '../../types/types'
 import { useGameStateStore } from '../../store/gameStateStore'
 import './Box.css'
 
-const Box = ({ rowIndex, colIndex }: IBox) => {
-    const { gameState, setGameState, turn, toggleTurn } = useGameStateStore()
+const Box = ({ rowIndex, colIndex, socket }: IBox) => {
+    const { gameState, setGameState, turn, toggleTurn, sendMove } =
+        useGameStateStore()
 
     const handleBoxClick = (
         rowIndex: number,
@@ -11,6 +12,7 @@ const Box = ({ rowIndex, colIndex }: IBox) => {
         player: Player
     ) => {
         setGameState(rowIndex, colIndex, player)
+        sendMove(rowIndex, colIndex, player, socket)
         toggleTurn()
     }
 
